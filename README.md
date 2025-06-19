@@ -1,5 +1,5 @@
-# gamestore
-shop of computer games, non production, it`s my practical work
+# Gamestore
+Shop of computer games, non production, it`s my practical work
 
 This project is just for learning and a hobby, but I really enjoy making stuff like this.
 I know the code is pretty bad, there are lots of glitches and things don’t always work right, but I’m not gonna give up on it. 
