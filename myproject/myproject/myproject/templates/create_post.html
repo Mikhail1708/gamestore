@@ -1,0 +1,87 @@
+<!-- templates/create_post.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создать пост - GameStore</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0F0F23;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1E1E2E;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #2A2A3E;
+        }
+        .form-title {
+            margin-top: 0;
+            color: #8B5CF6;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background: #2A2A3E;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            color: #FFFFFF;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="form-title">Создать новый пост</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_title">Заголовок</label>
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                <label for="id_category">Категория</label>
+                {{ form.category }}
+            </div>
+            <div class="form-group">
+                <label for="id_content">Содержание</label>
+                {{ form.content }}
+            </div>
+            <button type="submit" class="btn-submit">Опубликовать</button>
+        </form>
+    </div>
+</body>
+</html>

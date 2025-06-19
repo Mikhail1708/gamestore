@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сообщество GameStore</title>
+    <style>
+        /* Основные стили */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0F0F23;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Шапка с навигацией */
+        .header {
+            background: #1E1E2E;
+            border-bottom: 1px solid #2A2A3E;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #8B5CF6;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-menu a:hover {
+            color: #8B5CF6;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            background: #2A2A3E;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #FFFFFF;
+            font-size: 14px;
+            width: 200px;
+        }
+
+        .search-box::placeholder {
+            color: #9CA3AF;
+        }
+
+        /* Основной контент */
+        .community-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* Стили для боковой панели */
+        .community-sidebar {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .profile-card {
+            background: #1E1E2E;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #2A2A3E;
+        }
+
+        .developer-card {
+            border: 2px solid #6366F1;
+        }
+
+        .profile-avatar img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
+            border: 3px solid #8B5CF6;
+        }
+
+        .profile-role {
+            color: #8B5CF6;
+            font-weight: 600;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .profile-email {
+            color: #9CA3AF;
+            text-align: center;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .profile-bio {
+            background: #2A2A3E;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #9CA3AF;
+        }
+
+        /* Стили для основного контента */
+        .community-content {
+            background: #1E1E2E;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #2A2A3E;
+        }
+
+        .community-header {
+            border-bottom: 1px solid #2A2A3E;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .community-header h1 {
+            margin: 0;
+            color: #FFFFFF;
+        }
+
+        .community-header p {
+            color: #9CA3AF;
+            margin: 10px 0 20px;
+        }
+
+        .btn-create-post {
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .btn-create-post:hover {
+            opacity: 0.9;
+        }
+
+        /* Стили для постов */
+        .posts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .community-post {
+            background: #2A2A3E;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #374151;
+        }
+
+        .post-header {
+            margin-bottom: 15px;
+        }
+
+        .post-category {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .post-category.solution { background: rgba(16, 185, 129, 0.2); color: #10B981; }
+        .post-category.discussion { background: rgba(59, 130, 246, 0.2); color: #3B82F6; }
+        .post-category.news { background: rgba(245, 158, 11, 0.2); color: #F59E0B; }
+        .post-category.tutorial { background: rgba(139, 92, 246, 0.2); color: #8B5CF6; }
+
+        .community-post h2 {
+            margin: 10px 0;
+            color: #FFFFFF;
+            font-size: 18px;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #9CA3AF;
+        }
+
+        .post-content {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-like, .btn-comment {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn-like {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+
+        .btn-like:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-comment {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3B82F6;
+        }
+
+        .btn-comment:hover {
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .community-container {
+                grid-template-columns: 1fr;
+            }
+
+            .community-sidebar {
+                position: static;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .search-box {
+                width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка с навигацией -->
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon">🎮</div>
+            GameStore
+        </a>
+
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="/dashboard/">Магазин</a></li>
+                <li><a href="/library/">Библиотека</a></li>
+                <li><a href="/community/" class="active">Сообщество</a></li>
+                <li><a href="/support/">Поддержка</a></li>
+            </ul>
+        </nav>
+
+        <div class="user-actions">
+            <input type="text" class="search-box" placeholder="Поиск игр...">
+            <div class="user-avatar">
+                <img src="/static/images/default_avatar.png" alt="Аватар пользователя">
+            </div>
+        </div>
+    </header>
+
+    <div class="community-container">
+        <!-- Боковая панель с профилями -->
+        <aside class="community-sidebar">
+            <div class="profile-card developer-card">
+                <div class="profile-avatar">
+                    <img src="/static/images/developer_avatar.png" alt="Аватар разработчика">
+                </div>
+                <h3>mikel</h3>
+                <p class="profile-role">Разработчик GameStore</p>
+                <p class="profile-email">mikhail52gr@gmail.com</p>
+                <div class="profile-bio">
+                    <p>Создатель и главный разработчик этого игрового магазина. Специализируюсь на Python/Django и веб-разработке. Люблю создавать удобные и функциональные интерфейсы.</p>
+                </div>
+                <div class="profile-stats">
+                    <span>На сайте с: 15.01.2023</span>
+                    <span>Постов: 42</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Основное содержимое с постами -->
+        <main class="community-content">
+            <div class="community-header">
+                <h1>Сообщество GameStore</h1>
+                <p>Обсуждайте игры, делитесь решениями и находите единомышленников</p>
+                <button class="btn-create-post" onclick="location.href='/community/create/'">Создать пост</button>
+            </div>
+
+            <div class="posts-list">
+                <!-- Пример поста 1 -->
+                <article class="community-post">
+                    <div class="post-header">
+                        <span class="post-category solution">Решение проблемы</span>
+                        <h2>Как исправить ошибку загрузки игры</h2>
+                        <div class="post-meta">
+                            <span>Автор: mikel</span>
+                            <span>20.06.2025 14:30</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>Если у вас возникает ошибка при загрузке игры, попробуйте следующие шаги:</p>
+                        <ol>
+                            <li>Проверьте подключение к интернету</li>
+                            <li>Обновите клиент GameStore</li>
+                            <li>Переустановите игру</li>
+                        </ol>
+                        <p>Если проблема сохраняется, напишите в поддержку.</p>
+                    </div>
+                    <div class="post-actions">
+                        <button class="btn-like" data-post-id="1">❤️ 15</button>
+                        <button class="btn-comment">💬 Комментировать</button>
+                    </div>
+                </article>
+
+                <!-- Пример поста 2 -->
+                <article class="community-post">
+                    <div class="post-header">
+                        <span class="post-category discussion">Обсуждение</span>
+                        <h2>Лучшие RPG этого года - ваши варианты?</h2>
+                        <div class="post-meta">
+                            <span>Автор: gamer123</span>
+                            <span>19.06.2025 10:15</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>Давайте составим список самых интересных RPG, которые вышли в этом году. Мой топ:</p>
+                        <ul>
+                            <li>Fantasy Quest</li>
+                            <li>Dragon Slayer</li>
+                            <li>Cyber Adventure</li>
+                        </ul>
+                        <p>Какие игры добавите вы?</p>
+                    </div>
+                    <div class="post-actions">
+                        <button class="btn-like" data-post-id="2">❤️ 8</button>
+                        <button class="btn-comment">💬 Комментировать</button>
+                    </div>
+                </article>
+
+                <!-- Пример поста 3 -->
+                <article class="community-post">
+                    <div class="post-header">
+                        <span class="post-category tutorial">Обучение</span>
+                        <h2>Гайд по прохождению Cyber Adventure</h2>
+                        <div class="post-meta">
+                            <span>Автор: pro_gamer</span>
+                            <span>18.06.2025 16:45</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>В этом гайде я расскажу как пройти сложные моменты в Cyber Adventure:</p>
+                        <p><strong>Глава 3:</strong> Используйте хакерские способности чтобы отключить охрану.</p>
+                        <p><strong>Глава 5:</strong> Не забудьте собрать все апгрейды для оружия.</p>
+                        <p>Полная версия гайда доступна по ссылке...</p>
+                    </div>
+                    <div class="post-actions">
+                        <button class="btn-like" data-post-id="3">❤️ 23</button>
+                        <button class="btn-comment">💬 Комментировать</button>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Обработка лайков
+        document.querySelectorAll('.btn-like').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const postId = this.getAttribute('data-post-id');
+                const likeCount = parseInt(this.textContent.match(/\d+/)[0]);
+
+                if (this.textContent.includes('❤️')) {
+                    this.textContent = `🤍 ${likeCount - 1}`;
+                } else {
+                    this.textContent = `❤️ ${likeCount + 1}`;
+                }
+
+                // Здесь будет AJAX-запрос к серверу
+                console.log(`Лайк для поста ${postId}`);
+            });
+        });
+
+        // Обработка клика по кнопке комментариев
+        document.querySelectorAll('.btn-comment').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const post = this.closest('.community-post');
+                const postTitle = post.querySelector('h2').textContent;
+                alert(`Комментарии к посту: ${postTitle}`);
+            });
+        });
+    </script>
+</body>
+</html>

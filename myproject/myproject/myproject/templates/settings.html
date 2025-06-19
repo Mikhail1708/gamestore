@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки аккаунта - GameStore</title>
+    <style>
+       :root {
+  --primary: #6366F1;
+  --primary-dark: #4F46E5;
+  --primary-light: #818CF8;
+  --secondary: #8B5CF6;
+  --dark: #0F0F23;
+  --darker: #1E1E2E;
+  --dark-light: #2A2A3E;
+  --light: #FFFFFF;
+  --lighter: #F3F4F6;
+  --gray: #9CA3AF;
+  --danger: #EF4444;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --border-radius: 8px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--dark);
+  color: var(--light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Messages */
+.messages {
+  margin: 0;
+}
+
+.message {
+  padding: 12px 24px;
+  margin: 0;
+  font-size: 14px;
+  border-bottom: 1px solid;
+}
+
+.message.success {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--success);
+}
+
+.message.error {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--danger);
+}
+
+/* Header */
+.header {
+  background: var(--darker);
+  border-bottom: 1px solid var(--dark-light);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-light);
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: white;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-box {
+  background: var(--dark-light);
+  border: 1px solid var(--dark-light);
+  border-radius: var(--border-radius);
+  padding: 8px 12px;
+  color: var(--light);
+  font-size: 13px;
+  width: 180px;
+  transition: var(--transition);
+}
+
+.search-box:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+}
+
+.search-box::placeholder {
+  color: var(--gray);
+}
+
+.header-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--dark-light);
+  border: 1px solid var(--dark-light);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 14px;
+  color: var(--light);
+}
+
+.header-icon:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--primary);
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+}
+
+/* Main Layout */
+.main-container {
+  flex: 1;
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 24px;
+  gap: 24px;
+}
+
+/* Page Header */
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--light);
+}
+
+.page-subtitle {
+  color: var(--gray);
+  font-size: 14px;
+}
+
+/* Sidebar */
+.settings-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.sidebar-menu {
+  background: var(--darker);
+  border: 1px solid var(--dark-light);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  color: var(--light);
+  text-decoration: none;
+  font-size: 13px;
+  transition: var(--transition);
+  border-bottom: 1px solid var(--dark-light);
+  cursor: pointer;
+}
+
+.sidebar-item:last-child {
+  border-bottom: none;
+}
+
+.sidebar-item:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary-light);
+}
+
+.sidebar-item.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+}
+
+.sidebar-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+/* Main Content */
+.settings-content {
+  flex: 1;
+  background: var(--darker);
+  border: 1px solid var(--dark-light);
+  border-radius: var(--border-radius);
+  padding: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--light);
+}
+
+/* Profile Avatar Section */
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--dark-light);
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+}
+
+.avatar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--dark-light);
+  color: var(--light);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--primary);
+}
+
+/* Form */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--light);
+  margin-bottom: 6px;
+}
+
+.form-input,
+.form-select {
+  background: var(--dark-light);
+  border: 1px solid var(--dark-light);
+  border-radius: var(--border-radius);
+  padding: 8px 12px;
+  color: var(--light);
+  font-size: 13px;
+  transition: var(--transition);
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+}
+
+.form-input::placeholder {
+  color: var(--gray);
+}
+
+.form-input[readonly] {
+  background: rgba(45, 55, 72, 0.3);
+  color: var(--gray);
+  cursor: not-allowed;
+}
+
+.form-select {
+  cursor: pointer;
+}
+
+.form-select option {
+  background: var(--darker);
+  color: var(--light);
+}
+
+/* Account Info Box */
+.account-info-box {
+  background: var(--dark-light);
+  border: 1px solid var(--dark-light);
+  border-radius: var(--border-radius);
+  padding: 12px;
+  margin-bottom: 16px;
+  color: var(--light);
+}
+
+.account-info-item {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.account-info-item:last-child {
+  margin-bottom: 0;
+}
+
+.account-info-item strong {
+  color: var(--light);
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--dark-light);
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--dark-light);
+  color: var(--gray);
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--light);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background: var(--dark-light);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.toggle-switch.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.toggle-switch.active::after {
+  transform: translateX(20px);
+}
+
+/* Settings Item */
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--dark-light);
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-item-info {
+  flex: 1;
+}
+
+.settings-item-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--light);
+  margin-bottom: 2px;
+}
+
+.settings-item-description {
+  font-size: 11px;
+  color: var(--gray);
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .settings-sidebar {
+    width: 100%;
+  }
+
+  .sidebar-menu {
+    display: flex;
+    overflow-x: auto;
+    border-radius: 6px;
+  }
+
+  .sidebar-item {
+    white-space: nowrap;
+    border-bottom: none;
+    border-right: 1px solid var(--dark-light);
+  }
+
+  .sidebar-item:last-child {
+    border-right: none;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .avatar-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .search-box {
+    width: 100px;
+  }
+}
+    </style>
+</head>
+<body>
+    <!-- Отображение сообщений Django -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Header -->
+    <header class="header">
+        <a href="/dashboard/" class="logo">
+            <div class="logo-icon">🎮</div>
+            GameStore
+        </a>
+
+        <div class="header-actions">
+            <input type="text" class="search-box" placeholder="Поиск игр...">
+            <div class="header-icon">🔍</div>
+            <div class="header-icon">🛒</div>
+            <div class="user-avatar" onclick="window.location.href='/dashboard/'">
+                {{ initials }}
+            </div>
+            <div class="header-icon">☰</div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div style="width: 100%;">
+            <div class="page-header">
+                <h1 class="page-title">Настройки аккаунта</h1>
+                <p class="page-subtitle">Управляйте своим профилем, безопасностью и предпочтениями</p>
+            </div>
+
+            <div style="display: flex; gap: 24px;">
+                <!-- Sidebar -->
+                <div class="settings-sidebar">
+                    <nav class="sidebar-menu">
+                        <a href="#" class="sidebar-item active" data-tab="profile">
+                            <div class="sidebar-icon">👤</div>
+                            Профиль
+                        </a>
+                        <a href="#" class="sidebar-item" data-tab="security">
+                            <div class="sidebar-icon">🔒</div>
+                            Безопасность
+                        </a>
+                        <a href="#" class="sidebar-item" data-tab="notifications">
+                            <div class="sidebar-icon">🔔</div>
+                            Уведомления
+                        </a>
+                        <a href="#" class="sidebar-item" data-tab="privacy">
+                            <div class="sidebar-icon">👁️</div>
+                            Приватность
+                        </a>
+                        <a href="#" class="sidebar-item" data-tab="preferences">
+                            <div class="sidebar-icon">⚙️</div>
+                            Предпочтения
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Main Content -->
+                <div class="settings-content">
+                    <!-- Profile Tab -->
+                    <div id="profile-tab" class="tab-content active">
+                        <h2 class="section-title">Информация профиля</h2>
+
+                        <!-- Avatar Section -->
+                        <div class="avatar-section">
+                            <div class="profile-avatar">
+                                {% if user.profile.avatar %}
+                                    <img src="{{ user.profile.avatar.url }}" alt="Аватар пользователя" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                {% else %}
+                                    {{ initials }}
+                                {% endif %}
+                            </div>
+                            <div class="avatar-actions">
+                                <form id="avatarForm" method="post" enctype="multipart/form-data" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="file" name="avatar" id="avatarInput" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-primary" id="changeAvatarBtn">Изменить фото</button>
+                                    <input type="hidden" name="action" value="change_avatar">
+                                </form>
+                                <form method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete_avatar">
+                                    <button type="submit" class="btn btn-secondary">Удалить</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Profile Form -->
+                        <form id="profileForm" method="post">
+                            {% csrf_token %}
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="firstName">Имя</label>
+                                    <input type="text" id="firstName" name="firstName" class="form-input" value="{{ user.first_name|default:'' }}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="lastName">Фамилия</label>
+                                    <input type="text" id="lastName" name="lastName" class="form-input" value="{{ user.last_name|default:'' }}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" id="email" name="email" class="form-input" value="{{ user.email|default:'' }}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="username">Имя пользователя</label>
+                                    <input type="text" id="username" class="form-input" value="{{ user.username }}" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="dateJoined">Дата регистрации</label>
+                                    <input type="text" id="dateJoined" class="form-input" value="{{ user.date_joined|date:'d.m.Y' }}" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="lastLogin">Последний вход</label>
+                                    <input type="text" id="lastLogin" class="form-input" value="{% if user.last_login %}{{ user.last_login|date:'d.m.Y H:i' }}{% else %}Никогда{% endif %}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-cancel" onclick="window.location.href='/dashboard/'">Отмена</button>
+                                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div id="security-tab" class="tab-content">
+                        <h2 class="section-title">Безопасность аккаунта</h2>
+
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label">Информация об аккаунте</label>
+                            <div class="account-info-box">
+                                <div class="account-info-item"><strong>Пользователь:</strong> {{ user.username }}</div>
+                                <div class="account-info-item"><strong>Email:</strong> {{ display_email }}</div>
+                                <div class="account-info-item"><strong>Статус:</strong> {% if user.is_active %}Активен{% else %}Неактивен{% endif %}</div>
+                                <div class="account-info-item"><strong>Права администратора:</strong> {% if user.is_superuser %}Да{% else %}Нет{% endif %}</div>
+                            </div>
+                        </div>
+
+                        <form id="securityForm">
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label class="form-label" for="currentPassword">Изменение пароля</label>
+                                <input type="password" id="currentPassword" class="form-input" placeholder="Текущий пароль">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <input type="password" id="newPassword" class="form-input" placeholder="Новый пароль">
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Изменить пароль</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Notifications Tab -->
+                    <div id="notifications-tab" class="tab-content">
+                        <h2 class="section-title">Настройки уведомлений</h2>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Email рекомендации</div>
+                                <div class="settings-item-description">Обновления игр</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="email-recommendations"></div>
+                        </div>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Запросы в друзья</div>
+                                <div class="settings-item-description">Новые запросы в друзья и принятые заявки</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="friend-requests"></div>
+                        </div>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Сообщения</div>
+                                <div class="settings-item-description">Личные сообщения от других игроков</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="messages"></div>
+                        </div>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Достижения</div>
+                                <div class="settings-item-description">Уведомления о новых достижениях</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="achievements"></div>
+                        </div>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Скидки и акции</div>
+                                <div class="settings-item-description">Специальные предложения и распродажи</div>
+                            </div>
+                            <div class="toggle-switch" data-setting="promotions"></div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Tab -->
+                    <div id="privacy-tab" class="tab-content">
+                        <h2 class="section-title">Настройки приватности</h2>
+
+                        <div class="form-group" style="margin-bottom: 20px;">
+                            <label class="form-label" for="profileVisibility">Видимость профиля</label>
+                            <div class="settings-item-description" style="margin-bottom: 8px;">Кто может видеть ваш профиль</div>
+                            <select id="profileVisibility" class="form-select">
+                                <option value="friends">Только друзья</option>
+                                <option value="public">Все пользователи</option>
+                                <option value="private">Никто</option>
+                            </select>
+                        </div>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Показывать статус онлайн</div>
+                                <div class="settings-item-description">Другие пользователи смогут видеть, когда вы в сети</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="online-status"></div>
+                        </div>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Разрешить запросы в друзья</div>
+                                <div class="settings-item-description">Другие пользователи смогут отправлять запросы в друзья</div>
+                            </div>
+                            <div class="toggle-switch" data-setting="friend-requests-allowed"></div>
+                        </div>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Показывать список друзей</div>
+                                <div class="settings-item-description">Ваш список друзей будет виден другим пользователям</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="show-friends"></div>
+                        </div>
+
+                        <div class="settings-item">
+                            <div class="settings-item-info">
+                                <div class="settings-item-title">Показывать достижения</div>
+                                <div class="settings-item-description">Ваши достижения будут видны другим пользователям</div>
+                            </div>
+                            <div class="toggle-switch active" data-setting="show-achievements"></div>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Tab -->
+                    <div id="preferences-tab" class="tab-content">
+                        <h2 class="section-title">Предпочтения</h2>
+
+                        <div style="margin-bottom: 20px;">
+                            <div class="settings-item-title" style="margin-bottom: 12px;">Общие настройки</div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="language">Язык интерфейса</label>
+                                    <select id="language" class="form-select">
+                                        <option value="ru" selected>Русский</option>
+                                        <option value="en">English</option>
+                                        <option value="de">Deutsch</option>
+                                        <option value="fr">Français</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="theme">Тема оформления</label>
+                                    <select id="theme" class="form-select">
+                                        <option value="dark" selected>Темная</option>
+                                        <option value="light">Светлая</option>
+                                        <option value="auto">Автоматически</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="currency">Валюта</label>
+                                    <select id="currency" class="form-select">
+                                        <option value="rub" selected>Рубли</option>
+                                        <option value="usd">Доллары</option>
+                                        <option value="eur">Евро</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="region">Регион</label>
+                                    <select id="region" class="form-select">
+                                        <option value="ru" selected>Россия</option>
+                                        <option value="us">США</option>
+                                        <option value="eu">Европа</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="gameFolder">Папка для игр</label>
+                            <input type="text" id="gameFolder" class="form-input" value="C:\Games" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Remove active class from all items
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+
+                // Add active class to clicked item
+                this.classList.add('active');
+
+                // Show selected tab content
+                const tabId = this.getAttribute('data-tab') + '-tab';
+                const tabContent = document.getElementById(tabId);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                }
+            });
+        });
+
+        // Toggle switches functionality
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const setting = this.getAttribute('data-setting');
+                const isActive = this.classList.contains('active');
+                console.log(`Setting ${setting} changed to: ${isActive}`);
+            });
+        });
+
+        // Profile form submission (отправляется на Django)
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            // Форма отправляется на сервер Django
+            console.log('Отправка формы профиля...');
+        });
+
+        // Security form
+        document.getElementById('securityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Функция изменения пароля будет добавлена позже');
+        });
+
+        // Avatar photo delete
+        document.querySelector('.btn-secondary').addEventListener('click', function() {
+            if (confirm('Вы уверены, что хотите удалить фото профиля?')) {
+                alert('Фото профиля удалено');
+            }
+        });
+
+        // Обработка загрузки аватара
+        document.getElementById('changeAvatarBtn').addEventListener('click', function() {
+            document.getElementById('avatarInput').click();
+        });
+
+        document.getElementById('avatarInput').addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                // Показать превью (опционально)
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.createElement('img');
+                    preview.src = e.target.result;
+                    preview.style.width = '100%';
+                    preview.style.height = '100%';
+                    preview.style.objectFit = 'cover';
+                    preview.style.borderRadius = '50%';
+
+                const avatar = document.querySelector('.profile-avatar');
+                avatar.innerHTML = '';
+                avatar.appendChild(preview);
+            }
+            reader.readAsDataURL(this.files[0]);
+
+            // Автоматически отправить форму
+            document.getElementById('avatarForm').submit();
+        }
+    });
+</script>
+</body>
+</html>

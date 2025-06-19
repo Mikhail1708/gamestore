@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameStore - Панель управления</title>
+    <style>
+     * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0F0F23;
+    color: #FFFFFF;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    background: #1E1E2E;
+    border-bottom: 1px solid #2A2A3E;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #8B5CF6;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+}
+
+.nav-menu a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.nav-menu a:hover {
+    color: #8B5CF6;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.search-box {
+    background: #2A2A3E;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #FFFFFF;
+    font-size: 14px;
+    width: 200px;
+}
+
+.search-box::placeholder {
+    color: #9CA3AF;
+}
+
+/* User Dropdown */
+.user-dropdown {
+    position: relative;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.user-avatar:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: scale(1.05);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: #1E1E2E;
+    border: 1px solid #2A2A3E;
+    border-radius: 12px;
+    min-width: 280px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #2A2A3E;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dropdown-avatar {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+}
+
+.dropdown-user-info {
+    flex: 1;
+}
+
+.dropdown-user-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+}
+
+.dropdown-user-email {
+    font-size: 14px;
+    color: #9CA3AF;
+}
+
+.dropdown-menu-items {
+    padding: 8px 0;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: rgba(139, 92, 246, 0.1);
+    color: #8B5CF6;
+}
+
+.dropdown-item.logout {
+    color: #EF4444;
+    border-top: 1px solid #2A2A3E;
+    margin-top: 8px;
+}
+
+.dropdown-item.logout:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+}
+
+.dropdown-item-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+/* Main Layout */
+.main-layout {
+    display: flex;
+    flex: 1;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #1E1E2E;
+    border-right: 1px solid #2A2A3E;
+    padding: 24px 0;
+    overflow-y: auto;
+}
+
+.sidebar-section {
+    margin-bottom: 32px;
+}
+
+.sidebar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #9CA3AF;
+    padding: 0 24px 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    margin-bottom: 4px;
+}
+
+.sidebar-menu a {
+    display: block;
+    padding: 12px 24px;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+    background: rgba(139, 92, 246, 0.1);
+    border-left-color: #8B5CF6;
+    color: #8B5CF6;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.content-header {
+    margin-bottom: 32px;
+}
+
+.content-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.content-subtitle {
+    color: #9CA3AF;
+    font-size: 16px;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.game-card {
+    background: #2A2A3E;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.game-image {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(135deg, #374151 0%, #2A2A3E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #9CA3AF;
+}
+
+.game-info {
+    padding: 16px;
+}
+
+.game-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.game-price {
+    color: #8B5CF6;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.game-genre {
+    color: #9CA3AF;
+    font-size: 14px;
+}
+
+.welcome-message {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 24px;
+    color: #10B981;
+    font-size: 14px;
+}
+
+/* Overlay для закрытия dropdown */
+.dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    display: none;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-overlay.show {
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        order: 2;
+    }
+
+    .nav-menu {
+        display: none;
+    }
+
+    .search-box {
+        width: 150px;
+    }
+
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dropdown-menu {
+        right: -20px;
+        min-width: 260px;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Overlay для закрытия dropdown -->
+    <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
+    <!-- Отображение сообщений Django -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="welcome-message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">🎮</div>
+            GameStore
+        </div>
+
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="/dashboard/">Магазин</a></li>
+                <li><a href="/library/">Библиотека</a></li>
+                <li><a href="/community/">Сообщество</a></li>
+                <li><a href="/support/">Поддержка</a></li>
+            </ul>
+        </nav>
+
+        <div class="user-actions">
+            <input type="text" class="search-box" placeholder="Поиск игр...">
+
+            <!-- User Dropdown -->
+            <div class="user-dropdown">
+                <div class="user-avatar" id="userAvatar">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" alt="Аватар" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    {% else %}
+                        {{ initials }}
+                    {% endif %}
+                </div>
+
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dropdown-header">
+                        <div class="dropdown-avatar">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="Аватар" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            {% else %}
+                                {{ initials }}
+                            {% endif %}
+                        </div>
+                        <div class="dropdown-user-info">
+                            <div class="dropdown-user-name">{{ full_name }}</div>
+                            <div class="dropdown-user-email">{{ display_email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-menu-items">
+                        <a href="/settings/" class="dropdown-item">
+                            <div class="dropdown-item-icon">⚙️</div>
+                            Настройки аккаунта
+                        </a>
+
+                         <a href="/purchases/" class="dropdown-item">
+                            <div class="dropdown-item-icon">🛒</div>
+                            Мои покупки
+                        </a>
+
+                        <a href="#" class="dropdown-item">
+                            <div class="dropdown-item-icon">❤️</div>
+                            Список желаний
+                        </a>
+
+                        <a href="/balance/" class="dropdown-item">
+                            <div class="dropdown-item-icon">💳</div>
+                            Баланс и платежи
+                        </a>
+
+                        <a href="error404" class="dropdown-item">
+                            <div class="dropdown-item-icon">🔄</div>
+                            Сменить аккаунт
+                        </a>
+
+                        <a href="{% url 'logout' %}" class="dropdown-item logout">
+                            <div class="dropdown-item-icon">🚪</div>
+                            Выйти
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+    <h3 class="sidebar-title">Категории игр</h3>
+    <ul class="sidebar-menu">
+        <li><a href="?category=all" class="{% if current_category == 'all' %}active{% endif %}">Все игры</a></li>
+        <li><a href="?category=Экшен" class="{% if current_category == 'Экшен' %}active{% endif %}">Экшен</a></li>
+        <li><a href="?category=RPG" class="{% if current_category == 'RPG' %}active{% endif %}">РПГ</a></li>
+        <li><a href="?category=Гонки" class="{% if current_category == 'Гонки' %}active{% endif %}">Гонки</a></li>
+        <li><a href="?category=Симулятор" class="{% if current_category == 'Симулятор' %}active{% endif %}">Симуляторы</a></li>
+        <li><a href="?category=Спорт" class="{% if current_category == 'Спорт' %}active{% endif %}">Спорт</a></li>
+        <li><a href="?category=Стратегии" class="{% if current_category == 'Стратегии' %}active{% endif %}">Стратегии</a></li>
+        <li><a href="?category=Приключения" class="{% if current_category == 'Приключения' %}active{% endif %}">Приключения</a></li>
+    </ul>
+</div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Популярные игры</h3>
+                <ul class="sidebar-menu">
+                    <li><a href="#">Топ продаж</a></li>
+                    <li><a href="#">Новинки</a></li>
+                    <li><a href="#">Скидки</a></li>
+                    <li><a href="#">Бесплатные</a></li>
+                    <li><a href="#">Предзаказы</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-header">
+                <h1 class="content-title">Рекомендуемые игры</h1>
+                <p class="content-subtitle">Откройте для себя лучшие игры этого месяца</p>
+            </div>
+        <div class="games-grid">
+            {% for game in games %}
+            <div class="game-card">
+                <div class="game-image">{{ game.icon }}</div>
+                <div class="game-info">
+                    <h3 class="game-title">{{ game.title }}</h3>
+                    <div class="game-price">{{ game.price }} ₽</div>
+                    <div class="game-genre">{{ game.genre }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        </main>
+    </div>
+    <script>
+        // Dropdown functionality
+        const userAvatar = document.getElementById('userAvatar');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const dropdownOverlay = document.getElementById('dropdownOverlay');
+
+        // Открытие/закрытие dropdown
+        userAvatar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDropdown();
+        });
+
+        dropdownOverlay.addEventListener('click', function() {
+            closeDropdown();
+        });
+
+        // Закрытие при клике вне dropdown
+        document.addEventListener('click', function(e) {
+            if (!userAvatar.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+
+        function toggleDropdown() {
+            const isOpen = dropdownMenu.classList.contains('show');
+            if (isOpen) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
+        }
+
+        function openDropdown() {
+            dropdownMenu.classList.add('show');
+            dropdownOverlay.classList.add('show');
+        }
+
+        function closeDropdown() {
+            dropdownMenu.classList.remove('show');
+            dropdownOverlay.classList.remove('show');
+        }
+
+        // Обработка кликов по пунктам меню
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '/settings/') {
+                    // Переход на страницу настроек
+                    window.location.href = '/settings/';
+                    return;
+                }
+                   if (this.getAttribute('href') === '/purchases/') {
+                    // Переход на страницу настроек
+                    window.location.href = '/purchases/';
+                    return;
+                }
+                 if (this.getAttribute('href') === '/balance/') {
+                    // Переход на страницу настроек
+                    window.location.href = '/balance/';
+                    return;
+                }
+
+                if (!this.classList.contains('logout')) {
+                    e.preventDefault();
+                    const text = this.textContent.trim();
+                    alert(`Переход в раздел: ${text}`);
+                    closeDropdown();
+                }
+            });
+        });
+
+        // Простая интерактивность для игр
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.game-title').textContent;
+                alert(`Открытие страницы игры: ${title}`);
+            });
+        });
+        document.querySelector('.nav-menu a[href="/library/"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/library/';
+        });
+        document.querySelector('.nav-menu a[href="/community/"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/community/';
+        });
+ document.querySelector('.nav-menu a[href="/support/"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/support/';
+        });
+        // Простая интерактивность для игр
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.game-title').textContent;
+                alert(`Открытие страницы игры: ${title}`);
+            });
+        });
+        // Поиск игр
+        document.querySelector('.search-box').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value;
+                if (query) {
+                    alert(`Поиск игр: ${query}`);
+                }
+            }
+        });
+
+        // Закрытие dropdown при нажатии Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDropdown();
+            }
+        });
+
+        // Инициализация данных пользователя
+        function initializeUserData() {
+            // Данные приходят из Django контекста
+            const userData = {
+                firstName: '{{ user.first_name|default:"" }}',
+                lastName: '{{ user.last_name|default:"" }}',
+                email: '{{ user.email|default:"" }}',
+                initials: '{{ initials }}'
+            };
+
+            // Обновление инициалов (уже установлены из Django)
+            // userAvatar.textContent = userData.initials; // Убрать эту строку
+            // document.querySelector('.dropdown-avatar').textContent = userData.initials; // Убрать эту строку
+
+            // Обновление информации в dropdown (уже установлено из Django)
+            // document.querySelector('.dropdown-user-name').textContent = `${userData.firstName} ${userData.lastName}`; // Убрать
+            // document.querySelector('.dropdown-user-email').textContent = userData.email; // Убрать
+        }
+         document.addEventListener('DOMContentLoaded', function() {
+            const categoryLinks = document.querySelectorAll('.sidebar-menu[data-category] a');
+            const gamesGrid = document.getElementById('gamesGrid');
+            const gameCards = document.querySelectorAll('.game-card');
+
+            // Обработчик клика по категориям
+         categoryLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Удаляем активный класс у всех ссылок
+                    categoryLinks.forEach(item => item.classList.remove('active'));
+                    // Добавляем активный класс текущей ссылке
+                    this.classList.add('active');
+
+                    const category = this.getAttribute('data-category');
+                    filterGames(category);
+                });
+            });
+
+            // Функция фильтрации игр
+         function filterGames(category) {
+                if (category === 'all') {
+                    // Показываем все игры
+                    gameCards.forEach(card => {
+                        card.style.display = 'block';
+                    });
+                    return;
+                }
+
+                // Фильтруем игры по категории
+         gameCards.forEach(card => {
+                    const categories = card.getAttribute('data-categories').split(',');
+                    if (categories.includes(category)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            // Инициализация - показываем все игры при загрузке
+            filterGames('all');
+        });
+
+        // Инициализация при загрузке страницы
+        initializeUserData();
+    </script>
+</body>
+</html>

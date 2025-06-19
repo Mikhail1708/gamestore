@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека - GameStore</title>
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #8B5CF6;
+            --dark: #1E1E2E;
+            --darker: #0F0F23;
+            --darkest: #0A0A18;
+            --light: #F3F4F6;
+            --gray: #9CA3AF;
+            --gray-dark: #374151;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .header {
+            width: 100%;
+            height: 70px;
+            background: var(--dark);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 70px auto 0;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+            margin-bottom: 2rem;
+        }
+
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            background: var(--darkest);
+            border-radius: 8px;
+            font-weight: 500;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-tab:hover {
+            color: white;
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .game-card {
+            background: var(--dark);
+            border: 1px solid var(--gray-dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 160px;
+            background: var(--gray-dark);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .game-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-price {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-genre {
+            font-size: 0.875rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .game-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.875rem;
+            flex: 1;
+            text-align: center;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .details-btn {
+            background: var(--gray-dark);
+            color: white;
+        }
+
+        .no-games {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            font-size: 1.1rem;
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+
+            .filter-tabs {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="/dashboard/" class="logo">
+            <div class="logo-icon">🎮</div>
+            GameStore
+        </a>
+    </header>
+
+    <!-- Основное содержимое -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Библиотека игр</h1>
+            <p class="page-subtitle">Откройте для себя лучшие игры этого месяца</p>
+
+            <!-- Фильтр по жанрам -->
+            <div class="filter-section">
+                <h3 class="section-title">Жанры</h3>
+                <div class="filter-tabs">
+                    <a href="?genre=all&status={{ current_status }}" class="filter-tab {% if current_genre == 'all' %}active{% endif %}">Все</a>
+                    <a href="?genre=Экшен&status={{ current_status }}" class="filter-tab {% if current_genre == 'Экшен' %}active{% endif %}">Экшен</a>
+                    <a href="?genre=RPG&status={{ current_status }}" class="filter-tab {% if current_genre == 'RPG' %}active{% endif %}">RPG</a>
+                    <a href="?genre=Гонки&status={{ current_status }}" class="filter-tab {% if current_genre == 'Гонки' %}active{% endif %}">Гонки</a>
+                    <a href="?genre=Симулятор&status={{ current_status }}" class="filter-tab {% if current_genre == 'Симулятор' %}active{% endif %}">Симулятор</a>
+                </div>
+            </div>
+
+            <!-- Фильтр по статусу -->
+            <div class="filter-section">
+                <h3 class="section-title">Популярные игры</h3>
+                <div class="filter-tabs">
+                    <a href="?genre={{ current_genre }}&status=all" class="filter-tab {% if current_status == 'all' %}active{% endif %}">Все</a>
+                    <a href="?genre={{ current_genre }}&status=new" class="filter-tab {% if current_status == 'new' %}active{% endif %}">Новинки</a>
+                    <a href="?genre={{ current_genre }}&status=sale" class="filter-tab {% if current_status == 'sale' %}active{% endif %}">Скидки</a>
+                    <a href="?genre={{ current_genre }}&status=free" class="filter-tab {% if current_status == 'free' %}active{% endif %}">Бесплатные</a>
+                    <a href="?genre={{ current_genre }}&status=premium" class="filter-tab {% if current_status == 'premium' %}active{% endif %}">Премиум</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Список игр -->
+         <div class="games-grid">
+            {% for game in games %}
+            <div class="game-card">
+                <div class="game-image">{{ game.icon }}</div>
+                <div class="game-info">
+                    <h3 class="game-title">{{ game.title }}</h3>
+                    <div class="game-price">
+                        {% if game.price == 0 %}Бесплатно{% else %}{{ game.price }} ₽{% endif %}
+                    </div>
+                    <div class="game-genre">{{ game.genre }}</div>
+                    <div class="game-actions">
+                        <button class="action-btn play-btn">Играть</button>
+                        <button class="action-btn details-btn">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-games">
+                <p>Игры не найдены. Попробуйте изменить фильтры.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const genreTabs = document.querySelectorAll('.filter-section:nth-child(1) .filter-tab');
+            const statusTabs = document.querySelectorAll('.filter-section:nth-child(2) .filter-tab');
+            const gamesGrid = document.getElementById('gamesGrid');
+            const gameCards = document.querySelectorAll('.game-card');
+
+            let currentGenreFilter = 'all';
+            let currentStatusFilter = 'all';
+
+            // Функция фильтрации игр
+            function filterGames() {
+                let hasVisibleGames = false;
+
+                gameCards.forEach(card => {
+                    const genre = card.getAttribute('data-genre');
+                    const status = card.getAttribute('data-status');
+
+                    const genreMatch = currentGenreFilter === 'all' || genre === currentGenreFilter;
+                    const statusMatch = currentStatusFilter === 'all' || status === currentStatusFilter;
+
+                    if (genreMatch && statusMatch) {
+                        card.style.display = 'block';
+                        hasVisibleGames = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Показываем сообщение, если нет игр
+                const noGamesMsg = document.querySelector('.no-games');
+                if (!hasVisibleGames) {
+                    if (!noGamesMsg) {
+                        const msg = document.createElement('div');
+                        msg.className = 'no-games';
+                        msg.textContent = 'Игры не найдены. Попробуйте изменить фильтры.';
+                        gamesGrid.appendChild(msg);
+                    }
+                } else if (noGamesMsg) {
+                    noGamesMsg.remove();
+                }
+            }
+
+            // Обработчики для фильтров по жанрам
+            genreTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    genreTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentGenreFilter = this.getAttribute('data-filter');
+                    filterGames();
+                });
+            });
+
+            // Обработчики для фильтров по статусу
+            statusTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    statusTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentStatusFilter = this.getAttribute('data-status');
+                    filterGames();
+                });
+            });
+              // Обработка кликов по кнопкам "Играть" и "Подробнее"
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const gameTitle = this.closest('.game-card').querySelector('.game-title').textContent;
+                alert(`Запуск игры: ${gameTitle}`);
+            });
+        });
+
+        document.querySelectorAll('.details-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const gameTitle = this.closest('.game-card').querySelector('.game-title').textContent;
+                alert(`Подробнее об игре: ${gameTitle}`);
+            });
+        });
+
+        // Обработка кликов по карточкам игр
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const gameTitle = this.querySelector('.game-title').textContent;
+                alert(`Открытие страницы игры: ${gameTitle}`);
+            });
+        });
+
+            // Инициализация - показываем все игры
+            filterGames();
+        });
+    </script>
+</body>
+</html>

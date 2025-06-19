@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Баланс | GameStore</title>
+    <style>
+        /* Основные стили из dashboard */
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #8B5CF6;
+            --dark: #1E1E2E;
+            --darker: #0F0F23;
+            --darkest: #0A0A18;
+            --light: #F3F4F6;
+            --gray: #9CA3AF;
+            --gray-dark: #374151;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Шапка */
+        .header {
+            width: 100%;
+            height: 70px;
+            background: var(--dark);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin-left: 2rem;
+            gap: 1.5rem;
+        }
+
+        .nav-menu a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: white;
+        }
+
+        .search-box {
+            width: 320px;
+            height: 42px;
+            background: var(--darkest);
+            border: 1px solid var(--gray-dark);
+            border-radius: 8px;
+            margin-left: auto;
+            padding: 0 1rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-box::placeholder {
+            color: var(--gray);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-left: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* Основное содержимое */
+        .main-content {
+            max-width: 1400px;
+            margin: 70px auto 0;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        /* Карточка баланса */
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .balance-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .balance-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 1rem 0;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: #f8f8f8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Способы оплаты */
+        .payment-methods {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .method-card {
+            background: var(--darkest);
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .method-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .method-icon {
+            font-size: 2rem;
+            margin-right: 1.5rem;
+            width: 50px;
+            height: 50px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .method-info {
+            flex: 1;
+        }
+
+        .method-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .method-details {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .no-methods {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* История транзакций */
+        .transactions {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-dark);
+        }
+
+        .transactions-table th {
+            background-color: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .transactions-table tr:hover {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        .transaction-positive {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .transaction-negative {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .no-transactions {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Dropdown стили */
+        .dropdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .dropdown-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 1rem;
+            top: 70px;
+            width: 280px;
+            background: var(--dark);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid var(--gray-dark);
+        }
+
+        .dropdown-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            overflow: hidden;
+        }
+
+        .dropdown-user-info {
+            flex: 1;
+        }
+
+        .dropdown-user-name {
+            font-weight: 600;
+            color: white;
+        }
+
+        .dropdown-user-email {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        .dropdown-menu-items {
+            padding: 0.5rem 0;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            text-decoration: none;
+            color: var(--gray);
+            transition: all 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: white;
+        }
+
+        .dropdown-item.active {
+            color: white;
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .dropdown-item-icon {
+            margin-right: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .dropdown-item.logout {
+            color: var(--danger);
+        }
+
+        .dropdown-item.logout:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .search-box {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .search-box {
+                width: 150px;
+                margin-left: auto;
+            }
+
+            .balance-amount {
+                font-size: 2.5rem;
+            }
+
+            .methods-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 1rem;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .balance-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .balance-amount {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay для закрытия dropdown -->
+    <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="/dashboard/" class="logo">
+            <div class="logo-icon">🎮</div>
+            GameStore
+        </a>
+
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="/dashboard/">Магазин</a></li>
+                <li><a href="/library/">Библиотека</a></li>
+                <li><a href="/community/">Сообщество</a></li>
+                <li><a href="#">Поддержка</a></li>
+            </ul>
+        </nav>
+        <div class="user-actions">
+            <input type="text" class="search-box" placeholder="Поиск игр...">
+
+            <!-- User Dropdown -->
+            <div class="user-dropdown">
+                <div class="user-avatar" id="userAvatar">
+                    {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" alt="Аватар" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    {% else %}
+                        {{ initials }}
+                    {% endif %}
+                </div>
+
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dropdown-header">
+                        <div class="dropdown-avatar">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="Аватар" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                            {% else %}
+                                {{ initials }}
+                            {% endif %}
+                        </div>
+                        <div class="dropdown-user-info">
+                            <div class="dropdown-user-name">{{ full_name }}</div>
+                            <div class="dropdown-user-email">{{ display_email }}</div>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-menu-items">
+                        <a href="/settings/" class="dropdown-item">
+                            <div class="dropdown-item-icon">⚙️</div>
+                            Настройки аккаунта
+                        </a>
+
+                        <a href="/purchases/" class="dropdown-item">
+                            <div class="dropdown-item-icon">🛒</div>
+                            Мои покупки
+                        </a>
+
+                        <a href="#" class="dropdown-item">
+                            <div class="dropdown-item-icon">❤️</div>
+                            Список желаний
+                        </a>
+
+                        <a href="/balance/" class="dropdown-item active">
+                            <div class="dropdown-item-icon">💳</div>
+                            Баланс и платежи
+                        </a>
+
+                        <a href="#" class="dropdown-item">
+                            <div class="dropdown-item-icon">🔄</div>
+                            Сменить аккаунт
+                        </a>
+
+                        <a href="{% url 'logout' %}" class="dropdown-item logout">
+                            <div class="dropdown-item-icon">🚪</div>
+                            Выйти
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Баланс и платежи</h1>
+            <p class="page-subtitle">Управляйте вашим балансом и способами оплаты</p>
+        </div>
+
+        <!-- Карточка баланса -->
+        <div class="balance-card">
+            <div class="balance-header">
+                <h2 class="balance-title">Текущий баланс</h2>
+                <button class="btn btn-primary" onclick="showDepositModal()">Пополнить баланс</button>
+            </div>
+            <div class="balance-amount">{{ balance|floatformat:2 }} ₽</div>
+        </div>
+
+        <!-- Способы оплаты -->
+        <div class="payment-methods">
+            <h2 class="section-title">Способы оплаты</h2>
+
+            {% if payment_methods %}
+            <div class="methods-grid">
+                {% for method in payment_methods %}
+                <div class="method-card">
+                    <div class="method-icon">
+                        {% if method.type == 'card' %}💳
+                        {% elif method.type == 'apple_pay' %}📱
+                        {% elif method.type == 'google_pay' %}📲
+                        {% elif method.type == 'qiwi' %}🧾
+                        {% else %}⚡{% endif %}
+                    </div>
+                    <div class="method-info">
+                        <h3 class="method-name">{{ method.get_type_display }}</h3>
+                        <p class="method-details">{{ method.details }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-methods">Нет добавленных способов оплаты</div>
+            {% endif %}
+
+            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="showAddMethodModal()">
+                Добавить способ оплаты
+            </button>
+        </div>
+
+        <!-- История транзакций -->
+        <div class="transactions">
+            <h2 class="section-title">История операций</h2>
+
+            {% if transactions %}
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Описание</th>
+                        <th>Сумма</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.created_at|date:"d.m.Y H:i" }}</td>
+                        <td>{{ transaction.description }}</td>
+                        <td class="{% if transaction.amount > 0 %}transaction-positive{% else %}transaction-negative{% endif %}">
+                            {% if transaction.amount > 0 %}+{% endif %}{{ transaction.amount|floatformat:2 }} ₽
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-transactions">Нет операций за выбранный период</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Dropdown functionality
+        const userAvatar = document.getElementById('userAvatar');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const dropdownOverlay = document.getElementById('dropdownOverlay');
+
+        // Открытие/закрытие dropdown
+        userAvatar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDropdown();
+        });
+
+        dropdownOverlay.addEventListener('click', function() {
+            closeDropdown();
+        });
+
+        // Закрытие при клике вне dropdown
+        document.addEventListener('click', function(e) {
+            if (!userAvatar.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+
+        function toggleDropdown() {
+            const isOpen = dropdownMenu.classList.contains('show');
+            if (isOpen) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
+        }
+
+        function openDropdown() {
+            dropdownMenu.classList.add('show');
+            dropdownOverlay.classList.add('show');
+        }
+
+        function closeDropdown() {
+            dropdownMenu.classList.remove('show');
+            dropdownOverlay.classList.remove('show');
+        }
+
+        // Закрытие dropdown при нажатии Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDropdown();
+            }
+        });
+
+        function showDepositModal() {
+            // Реализация модального окна для пополнения баланса
+            alert("Функция пополнения баланса будет реализована позже");
+        }
+
+        function showAddMethodModal() {
+            // Реализация модального окна для добавления способа оплаты
+            alert("Функция добавления способа оплаты будет реализована позже");
+        }
+    </script>
+</body>
+</html>

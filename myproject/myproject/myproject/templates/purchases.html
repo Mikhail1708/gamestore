@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Баланс и платежи | GameStore</title>
+    <style>
+        /* Основные стили из purchases.html */
+        :root {
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #8B5CF6;
+            --dark: #1E1E2E;
+            --darker: #0F0F23;
+            --darkest: #0A0A18;
+            --light: #F3F4F6;
+            --gray: #9CA3AF;
+            --gray-dark: #374151;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Основное содержимое */
+        .main-content {
+            max-width: 1400px;
+            margin: 70px auto 0;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        /* Карточки */
+        .card {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Баланс */
+        .balance-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .balance-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--gray-dark);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Способы оплаты */
+        .payment-methods {
+            margin-top: 2rem;
+        }
+
+        .method-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--darkest);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .method-card:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .method-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(99, 102, 241, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .method-info {
+            flex: 1;
+        }
+
+        .method-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .method-details {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+
+        .method-actions {
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Таблица транзакций */
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .transactions-table th,
+        .transactions-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-dark);
+        }
+
+        .transactions-table th {
+            background: var(--darkest);
+            color: var(--gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .transactions-table tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .transaction-positive {
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .transaction-negative {
+            color: var(--danger);
+            font-weight: 500;
+        }
+
+        .transaction-status {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        /* Сообщение об отсутствии данных */
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .balance-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .balance-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (должен быть включен из основного шаблона) -->
+    {% include 'header.html' %}
+
+    <!-- Основное содержимое -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Баланс и платежи</h1>
+            <p class="page-subtitle">Управляйте вашим балансом и платежными методами</p>
+        </div>
+
+        <div class="card">
+            <div class="balance-container">
+                <div>
+                    <h3>Текущий баланс</h3>
+                    <div class="balance-amount">{{ balance|floatformat:2 }} ₽</div>
+                </div>
+                <div class="balance-actions">
+                    <button class="btn btn-primary" onclick="showDepositModal()">Пополнить баланс</button>
+                    <button class="btn btn-secondary" onclick="showWithdrawModal()">Вывести средства</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Способы оплаты</h2>
+            <div class="payment-methods">
+                {% for method in payment_methods %}
+                <div class="method-card">
+                    <div class="method-icon">
+                        {% if method.type == 'card' %}💳
+                        {% elif method.type == 'apple_pay' %}📱
+                        {% elif method.type == 'google_pay' %}📲
+                        {% elif method.type == 'qiwi' %}🧾
+                        {% else %}⚡{% endif %}
+                    </div>
+                    <div class="method-info">
+                        <div class="method-title">{{ method.get_type_display }}</div>
+                        <div class="method-details">{{ method.details }}</div>
+                    </div>
+                    <div class="method-actions" onclick="editPaymentMethod({{ method.id }})">Изменить</div>
+                </div>
+                {% empty %}
+                <div class="no-data">Нет добавленных способов оплаты</div>
+                {% endfor %}
+            </div>
+            <button class="btn btn-secondary" onclick="showAddMethodModal()" style="margin-top: 1rem;">
+                Добавить способ оплаты
+            </button>
+        </div>
+
+        <div class="card">
+            <h2>История операций</h2>
+            {% if transactions %}
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Описание</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.created_at|date:"d.m.Y H:i" }}</td>
+                        <td>{{ transaction.description }}</td>
+                        <td class="{% if transaction.amount > 0 %}transaction-positive{% else %}transaction-negative{% endif %}">
+                            {% if transaction.amount > 0 %}+{% endif %}{{ transaction.amount|floatformat:2 }} ₽
+                        </td>
+                        <td>
+                            <span class="transaction-status {% if transaction.status == 'completed' %}status-completed{% else %}status-pending{% endif %}">
+                                {{ transaction.get_status_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="no-data">Нет операций за выбранный период</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function showDepositModal() {
+            // Реализация модального окна для пополнения баланса
+            alert("Функция пополнения баланса будет реализована позже");
+        }
+
+        function showWithdrawModal() {
+            // Реализация модального окна для вывода средств
+            alert("Функция вывода средств будет реализована позже");
+        }
+
+        function showAddMethodModal() {
+            // Реализация модального окна для добавления способа оплаты
+            alert("Функция добавления способа оплаты будет реализована позже");
+        }
+
+        function editPaymentMethod(methodId) {
+            // Реализация редактирования способа оплаты
+            alert("Редактирование способа оплаты #" + methodId + " будет реализовано позже");
+        }
+    </script>
+</body>
+</html>
