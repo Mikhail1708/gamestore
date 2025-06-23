@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Баланс и платежи | GameStore</title>
+    <title>Мои покупки | СантьStore</title>
     <style>
-        /* Основные стили из purchases.html */
         :root {
             --primary: #6366F1;
             --primary-dark: #4F46E5;
@@ -32,14 +31,49 @@
             background: var(--darker);
             color: var(--light);
             min-height: 100vh;
-            position: relative;
+        }
+
+        /* Шапка */
+        .header {
+            width: 100%;
+            height: 70px;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
         }
 
         /* Основное содержимое */
         .main-content {
-            max-width: 1400px;
-            margin: 70px auto 0;
-            padding: 2rem;
+            max-width: 1200px;
+            margin: 90px auto 30px;
+            padding: 0 2rem;
         }
 
         .page-header {
@@ -49,313 +83,329 @@
         .page-title {
             font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
             color: white;
         }
 
         .page-subtitle {
             font-size: 1rem;
             color: var(--gray);
-            font-weight: 400;
         }
 
-        /* Карточки */
-        .card {
-            background: var(--dark);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Баланс */
-        .balance-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .balance-amount {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-        }
-
-        .balance-actions {
+        /* Фильтры */
+        .filter-tabs {
             display: flex;
             gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        /* Кнопки */
-        .btn {
-            padding: 0.75rem 1.5rem;
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            background: var(--darkest);
             border-radius: 8px;
             font-weight: 500;
+            color: var(--gray);
             cursor: pointer;
             transition: all 0.3s;
-            border: none;
-            font-size: 1rem;
         }
 
-        .btn-primary {
+        .filter-tab:hover {
+            color: white;
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .filter-tab.active {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
         }
 
-        .btn-primary:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+        /* Список покупок */
+        .purchases-list {
+            display: grid;
+            gap: 1.5rem;
         }
 
-        .btn-secondary {
-            background: var(--gray-dark);
-            color: white;
+        .purchase-item {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .btn-secondary:hover {
-            background: var(--primary-dark);
-        }
-
-        /* Способы оплаты */
-        .payment-methods {
-            margin-top: 2rem;
-        }
-
-        .method-card {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background: var(--darkest);
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-
-        .method-card:hover {
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .method-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background: rgba(99, 102, 241, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .method-info {
-            flex: 1;
-        }
-
-        .method-title {
+        .game-title {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            color: white;
+            margin-bottom: 0.5rem;
         }
 
-        .method-details {
-            font-size: 0.875rem;
+        .game-details {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
             color: var(--gray);
+            font-size: 0.9rem;
         }
 
-        .method-actions {
-            color: var(--primary);
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        /* Таблица транзакций */
-        .transactions-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .transactions-table th,
-        .transactions-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--gray-dark);
-        }
-
-        .transactions-table th {
-            background: var(--darkest);
-            color: var(--gray);
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-        }
-
-        .transactions-table tr:hover {
-            background: rgba(99, 102, 241, 0.05);
-        }
-
-        .transaction-positive {
-            color: var(--success);
-            font-weight: 500;
-        }
-
-        .transaction-negative {
-            color: var(--danger);
-            font-weight: 500;
-        }
-
-        .transaction-status {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
+        .game-status {
             font-weight: 500;
         }
 
         .status-completed {
-            background: rgba(16, 185, 129, 0.1);
             color: var(--success);
         }
 
-        .status-pending {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
+        .status-refund {
+            color: var(--danger);
         }
 
-        /* Сообщение об отсутствии данных */
-        .no-data {
-            text-align: center;
-            padding: 2rem;
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .current-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .original-price {
             color: var(--gray);
-            font-style: italic;
+            text-decoration: line-through;
+            font-size: 0.9rem;
+        }
+
+        .discount-badge {
+            background: var(--success);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .purchase-date {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        /* Статистика */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-title {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
         }
 
         /* Адаптивность */
         @media (max-width: 768px) {
-            .balance-container {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
+            .main-content {
+                padding: 0 1rem;
+                margin-top: 80px;
             }
 
-            .balance-actions {
-                width: 100%;
-                flex-direction: column;
+            .filter-tabs {
+                flex-wrap: wrap;
             }
 
-            .btn {
-                width: 100%;
+            .stats-container {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header (должен быть включен из основного шаблона) -->
-    {% include 'header.html' %}
+    <!-- Header -->
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon">🎮</div>
+            СантьStore
+        </a>
+    </header>
 
     <!-- Основное содержимое -->
     <div class="main-content">
         <div class="page-header">
-            <h1 class="page-title">Баланс и платежи</h1>
-            <p class="page-subtitle">Управляйте вашим балансом и платежными методами</p>
+            <h1 class="page-title">Мои покупки</h1>
+            <p class="page-subtitle">История ваших покупок и загрузок</p>
         </div>
 
-        <div class="card">
-            <div class="balance-container">
-                <div>
-                    <h3>Текущий баланс</h3>
-                    <div class="balance-amount">{{ balance|floatformat:2 }} ₽</div>
+        <!-- Фильтры -->
+        <div class="filter-tabs">
+            <div class="filter-tab active">Все покупки</div>
+            <div class="filter-tab">Завершенные</div>
+            <div class="filter-tab">Возвраты</div>
+        </div>
+
+        <!-- Список покупок -->
+        <div class="purchases-list">
+            <!-- Покупка 1 -->
+            <div class="purchase-item">
+                <h3 class="game-title">Cyberpunk 2077</h3>
+                <div class="game-details">
+                    <span>PC</span>
+                    <span>RPG</span>
+                    <span class="game-status status-completed">Завершена</span>
                 </div>
-                <div class="balance-actions">
-                    <button class="btn btn-primary" onclick="showDepositModal()">Пополнить баланс</button>
-                    <button class="btn btn-secondary" onclick="showWithdrawModal()">Вывести средства</button>
+                <div class="price-container">
+                    <span class="current-price">2 999 ₽</span>
+                    <span class="original-price">3 999 ₽</span>
+                    <span class="discount-badge">-25%</span>
                 </div>
+                <div class="purchase-date">Дата покупки: 15.01.2024</div>
+            </div>
+
+            <!-- Покупка 2 -->
+            <div class="purchase-item">
+                <h3 class="game-title">The Witcher 3: Wild Hunt</h3>
+                <div class="game-details">
+                    <span>PC</span>
+                    <span>RPG</span>
+                    <span class="game-status status-completed">Завершена</span>
+                </div>
+                <div class="price-container">
+                    <span class="current-price">1 499 ₽</span>
+                    <span class="original-price">1 999 ₽</span>
+                    <span class="discount-badge">-25%</span>
+                </div>
+                <div class="purchase-date">Дата покупки: 10.01.2024</div>
+            </div>
+
+            <!-- Покупка 3 -->
+            <div class="purchase-item">
+                <h3 class="game-title">Red Dead Redemption 2</h3>
+                <div class="game-details">
+                    <span>PC</span>
+                    <span>Action</span>
+                    <span class="game-status status-completed">Завершена</span>
+                </div>
+                <div class="price-container">
+                    <span class="current-price">2 499 ₽</span>
+                </div>
+                <div class="purchase-date">Дата покупки: 08.01.2024</div>
+            </div>
+
+            <!-- Покупка 4 -->
+            <div class="purchase-item">
+                <h3 class="game-title">Grand Theft Auto V</h3>
+                <div class="game-details">
+                    <span>PC</span>
+                    <span>Action</span>
+                    <span class="game-status status-refund">Возврат</span>
+                </div>
+                <div class="price-container">
+                    <span class="current-price">1 999 ₽</span>
+                    <span class="original-price">2 999 ₽</span>
+                    <span class="discount-badge">-33%</span>
+                </div>
+                <div class="purchase-date">Дата покупки: 05.01.2024</div>
+            </div>
+
+            <!-- Покупка 5 -->
+            <div class="purchase-item">
+                <h3 class="game-title">Assassins Creed Valhalla</h3>
+                <div class="game-details">
+                    <span>PC</span>
+                    <span>Action</span>
+                    <span class="game-status status-completed">Завершена</span>
+                </div>
+                <div class="price-container">
+                    <span class="current-price">2 799 ₽</span>
+                    <span class="original-price">3 499 ₽</span>
+                    <span class="discount-badge">-20%</span>
+                </div>
+                <div class="purchase-date">Дата покупки: 03.01.2024</div>
+            </div>
+
+            <!-- Покупка 6 -->
+            <div class="purchase-item">
+                <h3 class="game-title">FIFA 24</h3>
+                <div class="game-details">
+                    <span>PC</span>
+                    <span>Sports</span>
+                    <span class="game-status status-completed">Завершена</span>
+                </div>
+                <div class="price-container">
+                    <span class="current-price">3 999 ₽</span>
+                </div>
+                <div class="purchase-date">Дата покупки: 01.01.2024</div>
             </div>
         </div>
 
-        <div class="card">
-            <h2>Способы оплаты</h2>
-            <div class="payment-methods">
-                {% for method in payment_methods %}
-                <div class="method-card">
-                    <div class="method-icon">
-                        {% if method.type == 'card' %}💳
-                        {% elif method.type == 'apple_pay' %}📱
-                        {% elif method.type == 'google_pay' %}📲
-                        {% elif method.type == 'qiwi' %}🧾
-                        {% else %}⚡{% endif %}
-                    </div>
-                    <div class="method-info">
-                        <div class="method-title">{{ method.get_type_display }}</div>
-                        <div class="method-details">{{ method.details }}</div>
-                    </div>
-                    <div class="method-actions" onclick="editPaymentMethod({{ method.id }})">Изменить</div>
-                </div>
-                {% empty %}
-                <div class="no-data">Нет добавленных способов оплаты</div>
-                {% endfor %}
+        <!-- Статистика -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-title">Всего покупок</div>
+                <div class="stat-value">6</div>
             </div>
-            <button class="btn btn-secondary" onclick="showAddMethodModal()" style="margin-top: 1rem;">
-                Добавить способ оплаты
-            </button>
-        </div>
 
-        <div class="card">
-            <h2>История операций</h2>
-            {% if transactions %}
-            <table class="transactions-table">
-                <thead>
-                    <tr>
-                        <th>Дата</th>
-                        <th>Описание</th>
-                        <th>Сумма</th>
-                        <th>Статус</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in transactions %}
-                    <tr>
-                        <td>{{ transaction.created_at|date:"d.m.Y H:i" }}</td>
-                        <td>{{ transaction.description }}</td>
-                        <td class="{% if transaction.amount > 0 %}transaction-positive{% else %}transaction-negative{% endif %}">
-                            {% if transaction.amount > 0 %}+{% endif %}{{ transaction.amount|floatformat:2 }} ₽
-                        </td>
-                        <td>
-                            <span class="transaction-status {% if transaction.status == 'completed' %}status-completed{% else %}status-pending{% endif %}">
-                                {{ transaction.get_status_display }}
-                            </span>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="no-data">Нет операций за выбранный период</div>
-            {% endif %}
+            <div class="stat-card">
+                <div class="stat-title">Потрачено</div>
+                <div class="stat-value">15 794 ₽</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-title">Сэкономлено</div>
+                <div class="stat-value">3 200 ₽</div>
+            </div>
         </div>
     </div>
 
     <script>
-        function showDepositModal() {
-            // Реализация модального окна для пополнения баланса
-            alert("Функция пополнения баланса будет реализована позже");
-        }
+        // Фильтрация покупок
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            const purchaseItems = document.querySelectorAll('.purchase-item');
 
-        function showWithdrawModal() {
-            // Реализация модального окна для вывода средств
-            alert("Функция вывода средств будет реализована позже");
-        }
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Удаляем активный класс у всех вкладок
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    // Добавляем активный класс текущей вкладке
+                    this.classList.add('active');
 
-        function showAddMethodModal() {
-            // Реализация модального окна для добавления способа оплаты
-            alert("Функция добавления способа оплаты будет реализована позже");
-        }
+                    const filter = this.textContent.trim();
+                    filterPurchases(filter);
+                });
+            });
 
-        function editPaymentMethod(methodId) {
-            // Реализация редактирования способа оплаты
-            alert("Редактирование способа оплаты #" + methodId + " будет реализовано позже");
-        }
+            function filterPurchases(filter) {
+                purchaseItems.forEach(item => {
+                    const statusElement = item.querySelector('.game-status');
+                    const status = statusElement ? statusElement.textContent.trim() : '';
+
+                    if (filter === 'Все покупки' ||
+                        (filter === 'Завершенные' && status === 'Завершена') ||
+                        (filter === 'Возвраты' && status === 'Возврат')) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
