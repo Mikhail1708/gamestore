@@ -1,4 +1,37 @@
 
+
+def next_row(row):
+    """Генерирует следующую строку треугольника Паскаля."""
+    row = [1] + row
+    for i in range(1, len(row) - 1):
+        row[i] += row[i + 1]
+    return row
+
+def print_pascal_triangle(n):
+    """Красиво выводит треугольник Паскаля."""
+    all_rows = []
+    
+    # Собираем все строки
+    row = []
+    for i in range(n):
+        row = next_row(row)
+        all_rows.append(row[:])  # сохраняем копию
+    
+    # Находим максимальную ширину последней строки
+    max_width = len(' '.join(str(x) for x in all_rows[-1]))
+    
+    # Выводим строки с центрированием
+    for row in all_rows:
+        row_str = '   '.join(str(num) for num in row)
+        print(row_str.center(max_width))
+
+# Основная программа
+if __name__ == "__main__":
+    n = int(input("Введите количество строк треугольника: "))
+    print("\n" + "ТРЕУГОЛЬНИК ПАСКАЛЯ".center(50))
+    print("=" * 50)
+    print_pascal_triangle(n)
+
 def check_palindrome(text: str) -> str:
     cleaned = ''.join(char.lower() for char in text if char.isalnum())
     
