@@ -1,5 +1,118 @@
+def count_points_in_square():
+    """Определяет количество точек, попадающих в квадрат"""
+    print("\nЗАДАЧА 2: Подсчет точек в квадрате")
+    print("-" * 50)
+    
+    try:
+        # Ввод данных
+        n = int(input("Введите количество точек (n): "))
+        a = float(input("Введите координату a центра квадрата: "))
+        b = float(input("Введите координату b центра квадрата: "))
+        
+        # Квадрат: сторона = 2, центр (a, b)
+        # Границы квадрата: [a-1, a+1] по X, [b-1, b+1] по Y
+        count = 0
+        points_in_square = []
+        
+        print(f"\nКвадрат имеет центр в точке ({a}, {b}) и сторону 2.")
+        print(f"Границы квадрата: x ∈ [{a-1}, {a+1}], y ∈ [{b-1}, {b+1}]")
+        print("\nВведите координаты точек:")
+        print("-" * 50)
+        
+        # Ввод и проверка каждой точки
+        for i in range(1, n + 1):
+            x = float(input(f"Точка {i}, координата x: "))
+            y = float(input(f"Точка {i}, координата y: "))
+            
+            # Проверка попадания в квадрат
+            if (a - 1 <= x <= a + 1) and (b - 1 <= y <= b + 1):
+                count += 1
+                points_in_square.append((x, y))
+                print(f"  ✓ Точка ({x}, {y}) находится ВНУТРИ квадрата")
+            else:
+                print(f"  ✗ Точка ({x}, {y}) находится СНАРУЖИ квадрата")
+        
+        # Вывод результатов
+        print("\n" + "=" * 50)
+        print("РЕЗУЛЬТАТЫ:")
+        print("=" * 50)
+        print(f"Всего точек: {n}")
+        print(f"Точек в квадрате: {count}")
+        
+        if count > 0:
+            print(f"Координаты точек внутри квадрата:")
+            for point in points_in_square:
+                print(f"  ({point[0]}, {point[1]})")
+        else:
+            print("В квадрате нет точек.")
+            
+    except ValueError:
+        print("Ошибка! Пожалуйста, вводите числовые значения.")
+    except Exception as e:
+        print(f"Произошла ошибка: {e}")
+
+# Запуск обеих задач
+if __name__ == "__main__":
+    # Задача 1 (автоматический расчет)
+    primes, result = sum_of_squares_first_seven_primes()
+    
+    print("=" * 60)
+    print("ЗАДАЧА 1: Сумма квадратов первых семи простых чисел")
+    print("=" * 60)
+    print(f"Первые 7 простых чисел: {primes}")
+    print(f"Сумма их квадратов: {result}")
+    print(f"Расчет: {' + '.join(f'{p}²' for p in primes)} = {' + '.join(str(p**2) for p in primes)} = {result}")
+    print("=" * 60)
+    
+    # Задача 2 (интерактивный ввод)
+    count_points_in_square()
 
 
+def is_prime(num):
+    """Проверяет, является ли число простым"""
+    if num < 2:
+        return False
+    if num == 2:
+        return True
+    if num % 2 == 0:
+        return False
+    
+    # Проверяем делители до квадратного корня
+    for i in range(3, int(num**0.5) + 1, 2):
+        if num % i == 0:
+            return False
+    return True
+
+def sum_of_squares_first_seven_primes():
+    """Вычисляет сумму квадратов первых семи простых чисел"""
+    primes = []
+    current_num = 2
+    
+    while len(primes) < 7:
+        if is_prime(current_num):
+            primes.append(current_num)
+        current_num += 1
+    
+    # Вычисляем сумму квадратов
+    sum_squares = sum(p**2 for p in primes)
+    
+    return primes, sum_squares
+
+# Выполнение задачи 1
+print("=" * 50)
+print("ЗАДАЧА 1: Сумма квадратов первых семи простых чисел")
+print("=" * 50)
+
+primes, result = sum_of_squares_first_seven_primes()
+
+print(f"Первые 7 простых чисел: {primes}")
+print(f"Их квадраты: {[p**2 for p in primes]}")
+print(f"\nСумма квадратов: {result}")
+print(f"\nПодробный расчет:")
+for i, prime in enumerate(primes, 1):
+    print(f"{prime}² = {prime**2}")
+print(f"\nИтого: {' + '.join(str(p**2) for p in primes)} = {result}")
+print("=" * 50)
 def next_row(row):
     """Генерирует следующую строку треугольника Паскаля."""
     row = [1] + row
