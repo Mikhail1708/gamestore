@@ -1,3 +1,75 @@
+def main():
+    # Ввод размеров матрицы
+    rows = int(input("Введите количество строк: "))
+    cols = int(input("Введите количество столбцов: "))
+    
+    # Ввод матрицы
+    matrix = []
+    print("Введите матрицу:")
+    for i in range(rows):
+        row = list(map(int, input().split()))
+        matrix.append(row)
+    
+    # Выбор направления
+    print("\nВыберите направление:")
+    print("1. По часовой")
+    print("2. Против часовой")
+    direction = int(input("Ваш выбор: "))
+    
+    # Выбор угла
+    print("\nВыберите угол:")
+    print("1. 90 градусов")
+    print("2. 180 градусов")
+    angle = int(input("Ваш выбор: "))
+    
+    # Поворот матрицы
+    if angle == 1:  # 90 градусов
+        if direction == 1:  # по часовой
+            # Поворот на 90 по часовой
+            rotated = []
+            for j in range(cols):
+                new_row = []
+                for i in range(rows-1, -1, -1):
+                    new_row.append(matrix[i][j])
+                rotated.append(new_row)
+        else:  # против часовой
+            # Поворот на 90 против часовой
+            rotated = []
+            for j in range(cols-1, -1, -1):
+                new_row = []
+                for i in range(rows):
+                    new_row.append(matrix[i][j])
+                rotated.append(new_row)
+    else:  # 180 градусов
+        # Поворот на 180 (одинаково для обоих направлений)
+        rotated = []
+        for i in range(rows-1, -1, -1):
+            new_row = []
+            for j in range(cols-1, -1, -1):
+                new_row.append(matrix[i][j])
+            rotated.append(new_row)
+    
+    # Вывод результата
+    print("\nРезультат:")
+    for row in rotated:
+        print(' '.join(map(str, row)))
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def count_points_in_square():
     """Определяет количество точек, попадающих в квадрат"""
     print("\nЗАДАЧА 2: Подсчет точек в квадрате")
