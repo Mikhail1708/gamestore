@@ -1,3 +1,16 @@
+import re
+from collections import Counter
+
+text = "Ваш текст здесь"
+letters = [word[0] for word in re.sub(r'[^\w\s]', '', text.lower()).split() if word]
+result = sorted(Counter(letters).items(), key=lambda x: x[1])
+
+for letter, freq in result:
+    print(f"'{letter}': {freq}")
+
+
+
+
 def main():
     # Ввод размеров матрицы
     rows = int(input("Введите количество строк: "))
