@@ -2,6 +2,42 @@ import re
 from collections import Counter
 
 text = "Ваш текст здесь"
+
+# очищаем текст и разбиваем на слова
+clean = re.sub(r'[^ws]', '', text.lower())
+words = [w for w in clean.split() if w]
+
+# список первых букв слов (как в твоём коде)
+letters = [word[0] for word in words]
+result = sorted(Counter(letters).items(), key=lambda x: x[1])
+
+for letter, freq in result:
+    print(f"'{letter}': {freq}")
+
+# --- расчёт процента слов со сдвоенной буквой ---
+# слово содержит сдвоенную букву, если внутри есть два подряд одинаковых символа
+def has_double_letter(word: str) -> bool:
+    # можно через regex: r'(.)\u0001'
+    return re.search(r'(.)\u0001', word) is not None
+
+total_words = len(words)
+if total_words > 0:
+    words_with_double = sum(1 for w in words if has_double_letter(w))
+    percent = words_with_double / total_words * 100
+    print(f"Всего слов: {total_words}")
+    print(f"Слов со сдвоенной буквой: {words_with_double}")
+    print(f"Процент: {percent:.2f}%")
+else:
+    print("В тексте нет слов.")
+
+
+
+
+
+import re
+from collections import Counter
+
+text = "Ваш текст здесь"
 letters = [word[0] for word in re.sub(r'[^\w\s]', '', text.lower()).split() if word]
 result = sorted(Counter(letters).items(), key=lambda x: x[1])
 
